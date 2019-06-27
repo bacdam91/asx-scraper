@@ -5,6 +5,10 @@ const Company = require("./classes/Company");
 const mongoose = require("mongoose");
 const config = require("config");
 
+const PAGE_RANGE = "0-9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(
+	","
+);
+
 async function getASXPage(pageRange) {
 	return await requestPromise(
 		"https://www.asx.com.au/asx/research/listedCompanies.do?coName=" +
@@ -32,8 +36,8 @@ function getCompanyDetails(currentRow, $) {
 	}
 }
 
-async function runScraper() {
-	const page = await getASXPage("A");
+async function runScraper(range) {
+	const page = await getASXPage(range);
 	const $ = parseHTML(page);
 	const rows = getTableRows($);
 	rows.each(function(index) {
@@ -51,6 +55,8 @@ mongoose
 	)
 	.then(() => {
 		console.log("Connected");
-		runScraper();
+		for (let i = 0; i < PAGE_RANGE.length; i++) {
+			runScraper(PAGE_RANGE[i]);
+		}
 	})
 	.catch(err => console.error("Could not connect...", err));
