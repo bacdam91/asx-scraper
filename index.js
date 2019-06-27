@@ -1,51 +1,40 @@
 const request = require("request");
 const cheerio = require("cheerio");
 const requestPromise = require("request-promise-native");
-const fs = require("fs");
+const Company = require("./classes/Company");
 
-// requestPromise(
-// 	"https://www.psa.org.au/wp-content/uploads/2018/05/cropped-psa-logo.png"
-// ).pipe(fs.createWriteStream("./resources/logo.png"));
+async function getASXPage(pageRange) {
+	return await requestPromise(
+		"https://www.asx.com.au/asx/research/listedCompanies.do?coName=" +
+			pageRange
+	);
+}
 
-const stream = fs.createReadStream("./resources/test.html", "utf8");
+function parseHTML(htmlString) {
+	return cheerio.load(htmlString, { normalizeWhitespace: true });
+}
 
-requestPromise(
-	"https://www.asx.com.au/asx/research/listedCompanies.do?coName=0-9"
-)
-	.then(function(htmlString) {
-		const $ = cheerio.load(htmlString, { normalizeWhitespace: true });
+function getTableRows($) {
+	return $(".contenttable").find("tr");
+}
 
-		const contentTable = $(".contenttable");
-		const rows = contentTable.find("tr");
+function getCompanyDetails(currentRow, $) {
+	let columns = currentRow.children("td");
+	if (columns.length > 0) {
+		let company = new Company();
+		company.extractCompanyDetails(columns);
+		company.printCompanyDetails();
+	}
+}
 
-		rows.each(function(index) {
-			let currentRow = rows[index];
-			let columns = $(currentRow).children("td");
-			if (columns.length > 0) {
-				let companyName = $(columns[0]).html();
-				let companyCode = $(columns[1])
-					.find("a")
-					.html();
-				let link = $(columns[1])
-					.find("a")
-					.prop("href");
-				let industry = $(columns[2]).html();
-
-				console.log(
-					`${companyName}, ${companyCode}, ${industry}, ${link}`
-				);
-			}
-		});
-	})
-	.catch(err => {
-		console.log(err);
+async function runScraper() {
+	const page = await getASXPage("0-9");
+	const $ = parseHTML(page);
+	const rows = getTableRows($);
+	rows.each(function(index) {
+		let currentRow = $(rows[index]);
+		getCompanyDetails(currentRow, $);
 	});
+}
 
-// stream.on("data", chunk => {
-// 	const $ = cheerio.load(chunk, { normalizeWhitespace: true });
-// 	const fruitNames = $(".fruit");
-
-// 	fruitNames.each(index => {
-// 		console.log($(fruitNames[index]).html());
-// 	});
-// });
+runScraper();
