@@ -1,30 +1,35 @@
 const cheerio = require("cheerio");
+const mongoose = require("mongoose");
 
-class Company {
-	constructor(name, code, link, industry) {
-		this.name = name;
-		this.code = code;
-		this.link = link;
-		this.industry = industry;
-	}
+const Schema = mongoose.Schema;
 
-	extractCompanyDetails(columns) {
-		const $ = cheerio.load(columns);
-		this.name = $(columns[0]).html();
-		this.code = $(columns[1])
-			.find("a")
-			.html();
-		this.link = $(columns[1])
-			.find("a")
-			.prop("href");
-		this.industry = $(columns[2]).html();
-	}
+const CompanySchema = new Schema({
+	companyName: { type: String, required: true },
+	companyCode: { type: String, min: 3, required: true },
+	industryGroup: String,
+	link: String
+});
 
-	printCompanyDetails() {
-		console.log(
-			`${this.name}, ${this.code}, ${this.industry}, ${this.link}`
-		);
-	}
-}
+CompanySchema.methods.extractCompanyDetails = function(columns) {
+	const $ = cheerio.load(columns);
+	this.companyName = $(columns[0]).html();
+	this.companyCode = $(columns[1])
+		.find("a")
+		.html();
+	this.link = $(columns[1])
+		.find("a")
+		.prop("href");
+	this.industryGroup = $(columns[2]).html();
+};
+
+CompanySchema.methods.printCompanyDetails = function() {
+	console.log(
+		`${this.companyName}, ${this.companyCode}, ${this.industryGroup}, ${
+			this.link
+		}`
+	);
+};
+
+const Company = mongoose.model("Company", CompanySchema);
 
 module.exports = Company;

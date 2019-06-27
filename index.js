@@ -25,12 +25,15 @@ function getCompanyDetails(currentRow, $) {
 	if (columns.length > 0) {
 		let company = new Company();
 		company.extractCompanyDetails(columns);
-		company.printCompanyDetails();
+		company.save(function(err) {
+			if (err) throw err;
+			company.printCompanyDetails();
+		});
 	}
 }
 
 async function runScraper() {
-	const page = await getASXPage("0-9");
+	const page = await getASXPage("A");
 	const $ = parseHTML(page);
 	const rows = getTableRows($);
 	rows.each(function(index) {
@@ -48,7 +51,6 @@ mongoose
 	)
 	.then(() => {
 		console.log("Connected");
+		runScraper();
 	})
 	.catch(err => console.error("Could not connect...", err));
-
-//runScraper();
