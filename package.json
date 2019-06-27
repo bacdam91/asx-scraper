@@ -1,25 +1,31 @@
 {
-  "name": "website-scraper",
-  "version": "1.0.0",
-  "description": "Scrape Australian Security Exchange and save the companies' details into a database",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bacdam91/asx-scraper.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/bacdam91/asx-scraper/issues"
-  },
-  "homepage": "https://github.com/bacdam91/asx-scraper#readme",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
-  }
+	"name": "website-scraper",
+	"version": "1.0.0",
+	"description": "Scrape Australian Security Exchange and save the companies' details into a database",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index",
+		"dev": "nodemon index"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bacdam91/asx-scraper.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/bacdam91/asx-scraper/issues"
+	},
+	"homepage": "https://github.com/bacdam91/asx-scraper#readme",
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.3",
+		"config": "^3.1.0",
+		"mongoose": "^5.6.1",
+		"request": "^2.88.0",
+		"request-promise-native": "^1.0.7"
+	},
+	"devDependencies": {
+		"nodemon": "^1.19.1"
+	}
 }

@@ -2,6 +2,8 @@ const request = require("request");
 const cheerio = require("cheerio");
 const requestPromise = require("request-promise-native");
 const Company = require("./classes/Company");
+const mongoose = require("mongoose");
+const config = require("config");
 
 async function getASXPage(pageRange) {
 	return await requestPromise(
@@ -37,4 +39,16 @@ async function runScraper() {
 	});
 }
 
-runScraper();
+mongoose
+	.connect(
+		`mongodb+srv://${config.get("dbConnection.username")}:${config.get(
+			"dbConnection.password"
+		)}@studybox-mjczc.mongodb.net/test`,
+		{ useNewUrlParser: true }
+	)
+	.then(() => {
+		console.log("Connected");
+	})
+	.catch(err => console.error("Could not connect...", err));
+
+//runScraper();
