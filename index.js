@@ -1,9 +1,13 @@
+require("express-async-errors");
 const request = require("request");
 const cheerio = require("cheerio");
 const requestPromise = require("request-promise-native");
 const Company = require("./classes/Company");
 const mongoose = require("mongoose");
 const config = require("config");
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 const PAGE_RANGE = "0-9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(
 	","
@@ -54,9 +58,18 @@ mongoose
 		{ useNewUrlParser: true }
 	)
 	.then(() => {
-		console.log("Connected");
-		for (let i = 0; i < PAGE_RANGE.length; i++) {
-			runScraper(PAGE_RANGE[i]);
-		}
+		console.log("Connected to DB...");
+		// for (let i = 0; i < PAGE_RANGE.length; i++) {
+		// 	runScraper(PAGE_RANGE[i]);
+		// }
 	})
 	.catch(err => console.error("Could not connect...", err));
+
+app.get("/", (req, res) => {
+	res.send("Hello");
+});
+
+app.listen(PORT, err => {
+	if (err) throw err;
+	console.log(`Listening to port ${PORT}...`);
+});
