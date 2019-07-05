@@ -23,15 +23,20 @@ mongoose
 	})
 	.catch(err => console.error("Could not connect...", err));
 
+async function getCompanies() {
+	return await Company.find()
+		.limit(100)
+		.sort({ companyName: "asc" });
+}
+
 app.get("/", (req, res) => {
-	let query = Company.find({ companyCode: "A2M" }, (err, docs) => {
-		if (err) throw err;
-		console.log(docs);
-	}).limit(500);
-	let promise = query.exec();
-	promise.then(data => {
-		res.render("home", { companies: data });
-	});
+	getCompanies()
+		.then(data => {
+			res.render("home", { companies: data });
+		})
+		.catch(err => {
+			res.send("Something went wrong.");
+		});
 });
 
 app.listen(PORT, err => {
