@@ -1,0 +1,10 @@
+ul 
+    each company in companies 
+        li 
+            - var url = "https://www.asx.com.au" + company.link
+            span #{company.companyName}
+            span 
+                a(href=url) #{company.companyCode}
+            span  #{company.industryGroup}
+
+            

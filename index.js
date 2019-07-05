@@ -1,8 +1,14 @@
 const mongoose = require("mongoose");
 const config = require("config");
+const Company = require("./classes/Company");
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3000;
 // const ASXScraper = require("./classes/ASXScraper");
 // const scraper = new ASXScraper();
 // console.log(scraper);
+
+app.set("view engine", "pug");
 
 mongoose
 	.connect(
@@ -18,7 +24,14 @@ mongoose
 	.catch(err => console.error("Could not connect...", err));
 
 app.get("/", (req, res) => {
-	res.send("Hello");
+	let query = Company.find({ companyCode: "A2M" }, (err, docs) => {
+		if (err) throw err;
+		console.log(docs);
+	}).limit(500);
+	let promise = query.exec();
+	promise.then(data => {
+		res.render("home", { companies: data });
+	});
 });
 
 app.listen(PORT, err => {
