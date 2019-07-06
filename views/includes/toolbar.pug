@@ -1,0 +1,19 @@
+- let pageRange = "0-9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z".split(",")
+div.toolbar
+    div.filter-options 
+        input.hidden-checkbox(type="checkbox", name="alphabetical" id="alphabetical-checkbox", checked="checked") 
+        label(for="alphabetical-checkbox") A-Z 
+        input.hidden-checkbox(type="checkbox", name="industry-group" id="industry-group-checkbox") 
+        label(for="industry-group-checkbox") IG
+        input.hidden-checkbox(type="checkbox", name="search-bar" id="search-bar-checkbox") 
+        label(for="search-bar-checkbox") SB
+    div.filters-container
+        div.alphabet-list-filter-container
+            ul.alphabet-list
+                each val in pageRange 
+                    li
+                        span= val
+        div.industry-group-filter-container 
+            select(name="industry-group-selector")
+
+        

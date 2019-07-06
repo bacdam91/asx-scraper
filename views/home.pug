@@ -1,10 +1,14 @@
-ul 
-    each company in companies 
-        li 
-            - var url = "https://www.asx.com.au" + company.link
-            span #{company.companyName}
-            span 
-                a(href=url) #{company.companyCode}
-            span  #{company.industryGroup}
+html
+    head
+        link(rel="stylesheet", href="assets/css/main.css")
+    body 
+        include ./includes/navbar.pug
+        main
+            div.company-list-container
+                include ./includes/toolbar.pug
+                include ./includes/company_list.pug
+            div.company-viewer-container
+                include ./includes/company_viewer.pug
+
 
             

@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const config = require("config");
 const Company = require("./classes/Company");
 const express = require("express");
+const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 // const ASXScraper = require("./classes/ASXScraper");
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 3000;
 // console.log(scraper);
 
 app.set("view engine", "pug");
+app.use(express.static(path.join(__dirname, "public")));
 
 mongoose
 	.connect(
