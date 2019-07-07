@@ -1,8 +1,6 @@
 ul.company-list 
-    each company in companies 
-        li.company-item 
-            - var url = "https://www.asx.com.au" + company.link
-            span.company-name #{company.companyName}
-            span.company-code 
-                a(href=url) #{company.companyCode}
-            span.industry-group  #{company.industryGroup}
+    li.company-item(ng-repeat="company in companies", ng-click="openInViewer($event)", data-id="{{company.companyCode}}")
+        span.company-name {{company.companyName | decode}}
+        span.company-code 
+            a(href="https://www.asx.com.au{{company.link}}") {{company.companyCode}}
+        span.industry-group  {{company.industryGroup | decode}}

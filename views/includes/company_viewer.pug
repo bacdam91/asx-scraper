@@ -1,8 +1,8 @@
-div.company-viewer
+div.company-viewer(ng-model="selectedCompany")
     div.viewer-header
-        h1.company-name
-        h3.company-code
-        h3.industry-group
+        h1.company-name {{selectedCompany.companyName | decode}}
+        h3.company-code {{selectedCompany.companyCode}}
+        h3.industry-group {{selectedCompany.industryGroup | decode}}
         h4 
-            a(href="http://") View on ASX 
+            a(href="https://www.asx.com.au{{selectedCompany.link}}") View on ASX 
     div.viewer-body 

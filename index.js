@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
 
 mongoose
 	.connect(
@@ -25,20 +26,36 @@ mongoose
 	})
 	.catch(err => console.error("Could not connect...", err));
 
-async function getCompanies() {
-	return await Company.find()
-		.limit(100)
-		.sort({ companyName: "asc" });
+async function getCompanies(pageRange) {
+	let regexp =
+		pageRange === "0-9"
+			? new RegExp("^[0-9]")
+			: new RegExp("^" + pageRange);
+	return await Company.find({ companyName: regexp }).sort({
+		companyName: "asc"
+	});
+}
+
+async function getCompany(companyCode) {
+	return await Company.find({ companyCode });
 }
 
 app.get("/", (req, res) => {
-	getCompanies()
-		.then(data => {
-			res.render("home", { companies: data });
-		})
-		.catch(err => {
-			res.send("Something went wrong.");
-		});
+	res.render("home");
+});
+
+app.get("/companies/:page", (req, res) => {
+	const page = req.params.page;
+	getCompanies(page).then(data => {
+		res.header("Content-type", "text/plain").send(JSON.stringify(data));
+	});
+});
+
+app.get("/company/:companyCode", (req, res) => {
+	const companyCode = req.params.companyCode;
+	getCompany(companyCode).then(data => {
+		res.header("Content-type", "text/plain").send(data);
+	});
 });
 
 app.listen(PORT, err => {

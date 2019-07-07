@@ -38,7 +38,8 @@ main,
 .toolbar,
 .company-list-container,
 .company-list,
-.company-item {
+.company-item,
+.alphabet-list {
 	display: grid;
 	position: relative;
 }
@@ -84,4 +85,46 @@ main {
 
 .hidden-checkbox {
 	display: hidden;
+}
+
+.alphabet-list {
+	width: 100%;
+	grid-template-columns: repeat(27, 1fr);
+	grid-template-rows: 1fr;
+}
+
+.alphabet-list-item {
+	cursor: pointer;
+}
+
+.loader-container {
+	display: grid;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.loader {
+	display: block;
+	position: relative;
+	align-self: center;
+	justify-self: center;
+	border: 5px solid grey;
+	border-top: 5px solid rgb(46, 110, 194);
+	border-radius: 50%;
+	width: 30px;
+	height: 30px;
+	animation: spin 0.5s linear infinite;
 }

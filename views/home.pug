@@ -1,14 +1,20 @@
-html
+html(lang="en-US")
     head
         link(rel="stylesheet", href="assets/css/main.css")
-    body 
+        script(src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js")
+    body(ng-app="stock-notes")
         include ./includes/navbar.pug
-        main
+        main(ng-controller="company-list-controller")
             div.company-list-container
                 include ./includes/toolbar.pug
                 include ./includes/company_list.pug
+                .loader-container(ng-if="dataLoading")
+                    div.loader
             div.company-viewer-container
                 include ./includes/company_viewer.pug
+                .loader-container(ng-if="companyDataLoading")
+                    div.loader
+        script(src="assets/js/main.js")
 
 
             
