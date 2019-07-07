@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const config = require("config");
 const Company = require("./classes/Company");
+const ASXScraper = require("./classes/ASXScraper");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -40,6 +41,15 @@ async function getCompany(companyCode) {
 	return await Company.find({ companyCode });
 }
 
+async function getCompanyInfo(companyCode) {
+	const asxScraper = new ASXScraper();
+	const price = await asxScraper.getCompanyFinancials(companyCode);
+	//console.log(price);
+	const company = await getCompany(companyCode);
+	company[0].setPrice(price);
+	return company;
+}
+
 app.get("/", (req, res) => {
 	res.render("home");
 });
@@ -53,7 +63,8 @@ app.get("/companies/:page", (req, res) => {
 
 app.get("/company/:companyCode", (req, res) => {
 	const companyCode = req.params.companyCode;
-	getCompany(companyCode).then(data => {
+	getCompanyInfo(companyCode).then(data => {
+		//console.log(data);
 		res.header("Content-type", "text/plain").send(data);
 	});
 });

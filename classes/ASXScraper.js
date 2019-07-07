@@ -2,6 +2,7 @@ const Company = require("./Company");
 const request = require("request");
 const cheerio = require("cheerio");
 const requestPromise = require("request-promise-native");
+const phantom = require("phantom");
 
 class ASXScraper {
 	static getPageRange() {
@@ -36,6 +37,30 @@ class ASXScraper {
 				company.printCompanyDetails();
 			});
 		}
+	}
+
+	async getCompanyPage(url) {
+		return await requestPromise(url);
+	}
+
+	async getCompanyFinancials(companyCode) {
+		const url =
+			"https://www.asx.com.au/asx/share-price-research/company/" +
+			companyCode;
+		const instance = await phantom.create();
+		const page = await instance.createPage();
+
+		// await page.on("onResourceRequested", function(requestData) {
+		// 	console.info("Requesting", requestData.url);
+		// });
+
+		const status = await page.open(url);
+		const content = await page.property("content");
+		const $ = this.parseHTML(content);
+		await instance.exit();
+		const price = $(".overview-price span").text();
+		//console.log("Price: " + price);
+		return price;
 	}
 
 	async runScraper() {

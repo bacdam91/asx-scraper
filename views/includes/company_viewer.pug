@@ -6,3 +6,4 @@ div.company-viewer(ng-model="selectedCompany")
         h4 
             a(href="https://www.asx.com.au{{selectedCompany.link}}") View on ASX 
     div.viewer-body 
+        span.share-price {{selectedCompany.price}}

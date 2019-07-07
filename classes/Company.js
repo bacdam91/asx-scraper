@@ -7,7 +7,8 @@ const CompanySchema = new Schema({
 	companyName: { type: String, required: true },
 	companyCode: { type: String, min: 3, required: true },
 	industryGroup: String,
-	link: String
+	link: String,
+	price: Number
 });
 
 CompanySchema.methods.extractCompanyDetails = function(columns) {
@@ -28,6 +29,10 @@ CompanySchema.methods.printCompanyDetails = function() {
 			this.link
 		}`
 	);
+};
+
+CompanySchema.methods.setPrice = function(price) {
+	this.price = price;
 };
 
 const Company = mongoose.model("Company", CompanySchema);
