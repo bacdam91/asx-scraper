@@ -6,9 +6,8 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
-// const ASXScraper = require("./classes/ASXScraper");
-// const scraper = new ASXScraper();
-// console.log(scraper);
+const scraper = new ASXScraper();
+//console.log(scraper);
 
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
@@ -18,7 +17,7 @@ mongoose
 	.connect(
 		`mongodb+srv://${config.get("dbConnection.username")}:${config.get(
 			"dbConnection.password"
-		)}@studybox-mjczc.mongodb.net/test`,
+		)}@studybox-mjczc.mongodb.net/asx_companies`,
 		{ useNewUrlParser: true }
 	)
 	.then(() => {
